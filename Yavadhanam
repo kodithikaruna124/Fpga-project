@@ -1,0 +1,59 @@
+//module 1 
+module yavadunam_vedicsqr4(out,in); 
+input [3:0]in; 
+output [7:0] out; 
+wire [3:0] def,carry,rhs,subop,adderop; 
+wire [7:0] defsq; 
+wire bo,ca; 
+twoscomplement h1(def,in); 
+squaring h2(defsq,def); 
+adder_subtractor h3(subop,bo,in,def,1'b1); 
+assign carry =defsq[7:4]; 
+assign rhs=defsq[3:0]; 
+adder_subtractor h4(adderop,ca,subop,carry,1'b0); 
+assign out={adderop,rhs}; 
+endmodule 
+
+//module 2 
+module twoscomplement(b,a); 
+input [3:0] a; 
+output [3:0] b; 
+assign b= (~a)+1; 
+endmodule 
+
+// module 3 
+module squaring(y,x); 
+input [3:0] x; 
+output [7:0] y; 
+assign y= x*x; 
+endmodule
+ 
+//module 4 
+module fulladder(sum,carry,a,b,c); 
+input a,b,c; 
+output reg sum,carry; 
+always @ (*) 
+begin 
+sum=a^b^c; 
+22 
+carry=(a&b)|(b&c)|(a&c); 
+end 
+endmodule 
+
+//module 5 
+module adder_subtractor(sd,cb,a,b,M); 
+input [3:0] a,b; 
+input M; 
+output [3:0] sd; 
+output cb; 
+wire c0,c1,c2; 
+wire [3:0] b_xor_M; 
+xor(b_xor_M[0],b[0],M); 
+xor(b_xor_M[1],b[1],M); 
+xor(b_xor_M[2],b[2],M); 
+xor(b_xor_M[3],b[3],M); 
+fulladder fa1(sd[0],c0,a[0],b_xor_M[0],M); 
+fulladder fa2(sd[1],c1,a[1],b_xor_M[1],c0); 
+fulladder fa3(sd[2],c2,a[2],b_xor_M[2],c1); 
+fulladder fa4(sd[3],cb,a[3],b_xor_M[3],c2); 
+endmodule
