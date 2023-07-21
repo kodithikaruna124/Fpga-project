@@ -1,0 +1,95 @@
+//module 1 
+module ns(i,r3,r2,r1,); 
+input [3:0]i; 
+output reg [7:0]r3; 
+output reg [7:0]r2; 
+output reg [3:0]r1; 
+wire [3:0]k,h2,s2,d2,c1,b1,diff1; 
+wire b0,bin,c,r0,y2,z2,n2; 
+wire [2:0]diff,y1,n1,z1;//a 
+wire [1:0]b; 
+wire [7:0]h1,s1,d1,h3,s3,d3,h4; 
+assign k={1'b0,1'b0,1'b0,1'b0}; 
+subtractor_4bit case1(diff,b0,i,k,bin); 
+assign b=diff[1:0]; 
+assign c=b[0]; 
+assign r0=c*c; 
+assign c1={1'b0,1'b0,1'b0,c}; 
+comparator case6(z1,z2,b1,c1); 
+assign d1=b+c; 
+assign d2={1'b0,1'b0,1'b1,1'b0}; 
+testing2 case5(d1,d2,d3); 
+always @(z2) 
+begin 
+if(z2) 
+assign r1=r0; 
+else 
+assign r1=d3+r0; 
+end 
+assign b1={1'b0,1'b0,diff[1:0]}; 
+assign diff1={1'b0,diff}; 
+comparator case2(y1,y2,diff1,b1); 
+assign s1=diff+b; 
+assign s2={1'b0,1'b1,1'b0,1'b0}; 
+ testing2 case4(s1,s2,s3); 
+always @(y2) 
+begin 
+if(y2) 
+assign r2=r1; 
+else 
+assign r2=s3+r1; 
+end 
+comparator case7(n1,n2,diff1,i); 
+assign h1=diff+i; 
+assign h2={1'b1,1'b0,1'b0,1'b0}; 
+testing2 case8(h1,h2,h3); 
+testing case9(h3,r2,h4); 
+always @ (n2) 
+begin 
+if(n2) 
+assign r3=r2; 
+else 
+assign r3=h4; 
+end 
+endmodule 
+
+//module 2 
+module subtractor_4bit(diff,bo,a,b,bin); 
+output [2:0]diff; 
+wire [3:0]d; 
+output bo; 
+input [3:0]a,b; 
+input bin; 
+wire [2:0]bi; 
+fulladder sub1(d[0],bi[0],a[0],~b[0],bin); 
+fulladder sub2(d[1],bi[1],a[1],~b[1],bi[0]); 
+fulladder sub3(d[2],bi[2],a[2],~b[2],bi[1]); 
+fulladder sub4(d[3],bo,a[3],~b[3],bi[2]); 
+assign diff=d[2:0]; 
+endmodule 
+
+//module 3 
+module comparator(y1,y2,a,b); 
+input [3:0] a,b; 
+output [2:0] y1; 
+output y2; 
+assign y1[0]=(a>b); 
+assign y1[1]=(a==b); 
+assign y1[2]=(a<b); 
+assign y2=y1[1]; 
+endmodule 
+
+//module 4 
+module testing2(i,r,o); 
+input [7:0]i; 
+input [3:0]r; 
+output [7:0]o; 
+assign o=i*r; 
+endmodule 
+
+//module 5 
+module testing(i1,i2,o); 
+input [7:0] i1,i2; 
+output [7:0] o; 
+assign o=i1+i2; 
+endmodule
